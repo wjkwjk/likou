@@ -12,22 +12,21 @@ public class Solution152 {
         ArrayList<Integer> list = new ArrayList<>();
         int lastp = 0;
         for (int i=0;i<nums.length;i++){
+            maxn = Math.max(maxn, nums[i]);
             if (nums[i]<0)  list.add(i);
             if (nums[i]==0){
                 maxn = Math.max(0, maxn);
                 if (list.size()%2==0){
                     int t = 1;
-                    for (int j = lastp;j<i;j++){
-                        t*=nums[j];
-                    }
-                    maxn = Math.max(maxn, t);
+                    for (int j = lastp;j<i;j++) t*=nums[j];
+                    if (i>lastp) maxn = Math.max(maxn, t);
                 }else{
                     int t = 1;
-                    for (int j=lastp;j<list.get(list.size()-1);j++)    t*=nums[j];
-                    maxn = Math.max(maxn, t);
+                    for (int j=lastp;j<list.get(list.size()-1);j++) t*=nums[j];
+                    if (list.get(list.size()-1) > lastp) maxn = Math.max(maxn, t);
                     t = 1;
-                    for (int j = list.get(0)+1; j<i;j++)  t*=nums[j];
-                    maxn = Math.max(maxn, t);
+                    for (int j = list.get(0)+1; j<i;j++)    t*=nums[j];
+                    if (i>list.get(0)+1)   maxn = Math.max(maxn, t);
                 }
                 lastp = i+1;
                 list.clear();
@@ -36,20 +35,23 @@ public class Solution152 {
 
         if (list.size()%2==0){
             int t = 1;
-            for (int j = lastp;j<nums.length;j++){
-                t*=nums[j];
-            }
-            maxn = Math.max(maxn, t);
+            for (int j = lastp;j<nums.length;j++)   t*=nums[j];
+            if (nums.length>lastp) maxn = Math.max(maxn, t);
         }else{
             int t = 1;
-            for (int j=lastp;j<list.get(list.size()-1);j++)    t*=nums[j];
-            maxn = Math.max(maxn, t);
+            for (int j=lastp;j<list.get(list.size()-1);j++) t*=nums[j];
+            if (list.get(list.size()-1)>lastp) maxn = Math.max(maxn, t);
             t = 1;
             for (int j = list.get(0)+1; j<nums.length;j++)  t*=nums[j];
-            maxn = Math.max(maxn, t);
+            if (nums.length > list.get(0)+1) maxn = Math.max(maxn, t);
         }
         return maxn;
     }
 
+    public static void main(String[] args) {
+        int[] nums = new int[]{-2, 0, -3};
+        Solution152 s = new Solution152();
+        s.maxProduct(nums);
+    }
 
 }
