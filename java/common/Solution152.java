@@ -23,13 +23,11 @@ public class Solution152 {
                     maxn = Math.max(maxn, t);
                 }else{
                     int t = 1;
-                    for (int j = list.get(0)+1;j<list.get(list.size()-1);j++)   t*=nums[j];
-                    int temp = t;
-                    for (int j=lastp;j<=list.get(0);j++)    temp*=nums[j];
-                    maxn = Math.max(maxn, temp);
-                    temp = t;
-                    for (int j = list.get(list.size()-1); j<i;j++)  temp*=nums[j];
-                    maxn = Math.max(maxn, temp);
+                    for (int j=lastp;j<list.get(list.size()-1);j++)    t*=nums[j];
+                    maxn = Math.max(maxn, t);
+                    t = 1;
+                    for (int j = list.get(0)+1; j<i;j++)  t*=nums[j];
+                    maxn = Math.max(maxn, t);
                 }
                 lastp = i+1;
                 list.clear();
@@ -44,13 +42,11 @@ public class Solution152 {
             maxn = Math.max(maxn, t);
         }else{
             int t = 1;
-            for (int j = list.get(0)+1;j<list.get(list.size()-1);j++)   t*=nums[j];
-            int temp = t;
-            for (int j=lastp;j<=list.get(0);j++)    temp*=nums[j];
-            maxn = Math.max(maxn, temp);
-            temp = t;
-            for (int j = list.get(list.size()-1); j<nums.length;j++)  temp*=nums[j];
-            maxn = Math.max(maxn, temp);
+            for (int j=lastp;j<list.get(list.size()-1);j++)    t*=nums[j];
+            maxn = Math.max(maxn, t);
+            t = 1;
+            for (int j = list.get(0)+1; j<nums.length;j++)  t*=nums[j];
+            maxn = Math.max(maxn, t);
         }
         return maxn;
     }
