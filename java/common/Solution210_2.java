@@ -1,6 +1,7 @@
 package common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -13,31 +14,75 @@ import java.util.LinkedList;
 
 public class Solution210_2 {
 
+    //使用toDegree数组，每次找到入度为0的元素
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        LinkedList<Integer>[] Q = new LinkedList<Integer>[numCourses];
-        int[] result = new int[numCourses];
-        int t = 0;
-        ArrayList<LinkedList<Integer>> L = new ArrayList<>(numCourses);
-        ArrayList<Integer> toDegree = new ArrayList<>(numCourses);
+        int[] toDegree = new int[numCourses];
+        HashMap<Integer, LinkedList<Integer>> G = new HashMap<>();
         for (int i=0;i<prerequisites.length;i++){
-            toDegree.set(prerequisites[i][0], toDegree.get(prerequisites[i][0])+1);
-            L.get(prerequisites[i][1]).addLast(prerequisites[i][0]);
+            toDegree[prerequisites[i][0]]++;
+            if (!G.containsKey(prerequisites[i][1]))    G.put(prerequisites[i][1], new LinkedList<>());
+            G.get(prerequisites[i][1]).add(prerequisites[i][0]);
         }
 
-        for (int i=0; i<numCourses; i++){
-            for (int j=0; j<numCourses; i++){
-                if (toDegree.get(j) == 0){
-                    for (int k=0;k<L.get(j).size();k++){
-                        toDegree.set(k, toDegree.get(L.get(j).get(k))-1);
-                    }
-                    toDegree.set(j, -1);
-                    result[t++] = j;
+        int index = 0;
+        int[] result = new int[numCourses];
+
+        for (int i=0;i<numCourses;i++){
+            int j = 0;
+            for (;j<toDegree.length;j++){
+                if (toDegree[j]==0){
+                    result[index++] = j;
+                    toDegree[j] = -1;
+                    break;
                 }
             }
+            if (j==toDegree.length) return new int[0];
+            if (G.containsKey(j)){
+                for (int k=0;k<G.get(j).size();k++){
+                    toDegree[G.get(j).get(k)]--;
+                }
+            }
+
         }
-        int[] x = new int[0];
-        if (t != numCourses)    return x;
         return result;
     }
+
+    //使用DFS
+    public int[] findOrder2(int numCourses, int[][] prerequisites) {
+        int[] toDegree = new int[numCourses];
+        HashMap<Integer, LinkedList<Integer>> G = new HashMap<>();
+        for (int i=0;i<prerequisites.length;i++){
+            toDegree[prerequisites[i][0]]++;
+            if (!G.containsKey(prerequisites[i][1]))    G.put(prerequisites[i][1], new LinkedList<>());
+            G.get(prerequisites[i][1]).add(prerequisites[i][0]);
+        }
+
+        int index = 0;
+        int[] result = new int[numCourses];
+
+        for (int i=0;i<numCourses;i++){
+            int j = 0;
+            for (;j<toDegree.length;j++){
+                if (toDegree[j]==0){
+                    result[index++] = j;
+                    toDegree[j] = -1;
+                    break;
+                }
+            }
+            if (j==toDegree.length) return new int[0];
+            if (G.containsKey(j)){
+                for (int k=0;k<G.get(j).size();k++){
+                    toDegree[G.get(j).get(k)]--;
+                }
+            }
+
+        }
+        return result;
+    }
+
+    void dfs(HashMap<Integer, LinkedList<Integer>> G, int[] toDegree, int start){
+
+    }
+
 
 }
