@@ -2,6 +2,7 @@ package common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,6 +14,8 @@ import java.util.List;
  */
 public class Solution368 {
     public List<Integer> largestDivisibleSubset(int[] nums) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i=0;i<nums.length;i++) map.put(nums[i], i);
         Arrays.sort(nums);
         int maxv=0;
         int index = 0;
@@ -33,6 +36,8 @@ public class Solution368 {
         for(int i=index;i>=0;i--){
             if (nums[index] % nums[i]==0)  L.add(nums[i]);
         }
+        int[] re = new int[L.size()];
+        
         return L;
     }
 }
