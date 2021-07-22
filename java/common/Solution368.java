@@ -13,31 +13,48 @@ import java.util.List;
  * 如果存在多个有效解子集，返回其中任何一个均可。
  */
 public class Solution368 {
+
+    /**
+     * 每个节点记录了当以当前数为最大值时的子集的元素数以及前一个子集的最大元素
+     */
+    class node{
+        int num;
+        int pre;
+
+        public node(int num, int pre) {
+            this.num = num;
+            this.pre = pre;
+        }
+    }
+
     public List<Integer> largestDivisibleSubset(int[] nums) {
-        HashMap<Integer, Integer> map = new HashMap<>();
-        for (int i=0;i<nums.length;i++) map.put(nums[i], i);
         Arrays.sort(nums);
-        int maxv=0;
+        node[] N = new node[nums.length];
         int index = 0;
-        int[] r = new int[nums.length];
-        for (int i=0;i<r.length;i++)    r[i] = 1;
+        int maxi = -1;
         for (int i=0;i<nums.length;i++){
-            int t = 0;
+            int maxv = 0;
+            int preindex = i;
             for (int j=i-1;j>=0;j--){
-                if (nums[i] % nums[j] ==0)  t = Math.max(t, r[j]);
+                if (nums[i] % nums[j] == 0){
+                    if (N[j].num > maxv){
+                        maxv = N[j].num;
+                        preindex = j;
+                    }
+                }
             }
-            r[i]+=t;
-            if (r[i]>maxv){
-                maxv = r[i];
+            N[i] = new node(maxv + 1, preindex);
+            if (N[i].num > maxi){
+                maxi = N[i].num;
                 index = i;
             }
         }
         ArrayList<Integer> L = new ArrayList<>();
-        for(int i=index;i>=0;i--){
-            if (nums[index] % nums[i]==0)  L.add(nums[i]);
+        L.add(nums[index]);
+        while (N[index].pre!=index) {
+            index = N[index].pre;
+            L.add(nums[index]);
         }
-        int[] re = new int[L.size()];
-        
         return L;
     }
 }
