@@ -14,6 +14,12 @@ import java.util.List;
  * 请尽可能的优化算法的时间复杂度和空间复杂度。 输入的数据 n 小于等于 5,000,000。
  */
 public class Solution386 {
+
+    /**
+     * 使用java自带的Arrays.sort进行排序
+     * @param n
+     * @return
+     */
     public List<Integer> lexicalOrder(int n) {
         String[] S = new String[n];
         for (int i=1;i<=n;i++){
@@ -24,4 +30,15 @@ public class Solution386 {
         for (int i=0;i<S.length;i++)    L.add(Integer.parseInt(S[i]));
         return L;
     }
+
+    /**
+     * 将字典序抽象为一棵树
+     * @param n
+     * @return
+     */
+    public List<Integer> lexicalOrder2(int n) {
+        int[] tree = new int[n+1];
+        
+    }
+
 }
