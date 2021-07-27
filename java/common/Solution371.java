@@ -19,7 +19,7 @@ public class Solution371 {
             carry = (tmp1 & tmp2) << 1;
         }
         return noCarrySum;
-        
+
     }
 
     public static void main(String[] args) {
