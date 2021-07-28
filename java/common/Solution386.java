@@ -3,6 +3,7 @@ package common;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * 386. 字典序排数
@@ -32,13 +33,38 @@ public class Solution386 {
     }
 
     /**
-     * 将字典序抽象为一棵树
-     * @param n
+     * 将字典序抽象为一棵树, 十叉树
      * @return
      */
+
+    public void preorder(int[] TenTree, int root, List<Integer> L, String str){
+        str += Integer.toString(TenTree[root]);
+        if (root * 10 >= TenTree.length){
+            L.add(Integer.parseInt(str));
+        }
+        for (int i=0;i<10 && root*10+i<TenTree.length;i++){
+            preorder(TenTree, root*10+i, L, str);
+        }
+    }
+
     public List<Integer> lexicalOrder2(int n) {
-        int[] tree = new int[n+1];
-        
+
+        int[] TenTree = new int[n+2];
+
+        int x = 0;
+        for (int i=1;i<TenTree.length;i++){
+            if (i<11){
+                TenTree[i] = i - 1;
+            }
+            else{
+                TenTree[i] = x;
+                x = x==9 ? 0 : x+1;
+            }
+        }
+
+
+
+
     }
 
 }
