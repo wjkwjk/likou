@@ -1,5 +1,7 @@
 package common;
 
+import java.util.HashMap;
+
 /**
  * 785. 判断二分图
  * 存在一个 无向图 ，图中有 n 个节点。其中每个节点都有一个介于 0 到 n - 1 之间的唯一编号。给你一个二维数组 graph ，其中 graph[u] 是一个节点数组，由节点 u 的邻接节点组成。形式上，对于 graph[u] 中的每个 v ，都存在一条位于节点 u 和节点 v 之间的无向边。该无向图同时具有以下属性：
@@ -13,6 +15,25 @@ package common;
  */
 public class Solution785 {
     public boolean isBipartite(int[][] graph) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int[] visited = new int[graph.length];
+        for (int i=0;i<graph.length;i++){
+            if (visited[i] == 0 && !dfs(graph, i, visited, map))    return false;
+        }
+        return true;
+    }
 
+    public boolean dfs(int[][] graph, int start, int[] visited, HashMap<Integer, Integer> map){
+        visited[start] = 1;
+        if (!map.containsKey(start))    map.put(start, 1);
+        for (int i=0;i<graph[start].length;i++){
+            if (visited[graph[start][i]]==0){
+                map.put(graph[start][i], -1 * map.get(start));
+                if (!dfs(graph, graph[start][i], visited, map)) return false;
+            }else {
+                if (map.get(start) == map.get(graph[start][i])) return false;
+            }
+        }
+        return true;
     }
 }
