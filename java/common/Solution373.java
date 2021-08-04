@@ -24,21 +24,21 @@ public class Solution373 {
         y.set(1, temp);
     }
 
-    public void downAdjust(List<List<Integer>> L, int root, int end){
+    public void downAdjust(List<List<Integer>> L, int root, int end, int[] nums1, int[] nums2){
         while (root <= end){
-            int rootval = L.get(root).get(0) + L.get(root).get(1);
+            int rootval = nums1[L.get(root).get(0)] + nums2[L.get(root).get(1)];
             int rootleftval = Integer.MAX_VALUE;
             int rootrightval = Integer.MAX_VALUE;
             if (root * 2 > end)   break;
             else {
                 int swaptar = root;
-                rootleftval = L.get(root * 2).get(0) + L.get(root * 2).get(1);
+                rootleftval = nums1[L.get(root * 2).get(0)] + nums2[L.get(root * 2).get(1)];
                 if (root * 2 + 1 > end)    swaptar = root * 2;
                 else {
-                    rootrightval = L.get(root * 2 + 1).get(0) + L.get(root * 2 + 1).get(1);
+                    rootrightval = nums1[L.get(root * 2 + 1).get(0)] + nums2[L.get(root * 2 + 1).get(1)];
                     swaptar = rootleftval >= rootrightval ? root * 2 + 1 : root * 2;
                 }
-                if (rootval > L.get(swaptar).get(0) + L.get(swaptar).get(1))
+                if (rootval > nums1[L.get(swaptar).get(0)] + nums2[L.get(swaptar).get(1)])
                     swap(L.get(root), L.get(swaptar));
                 else break;
 
@@ -47,30 +47,31 @@ public class Solution373 {
         }
     }
 
-    public void upAdjust(List<List<Integer>> L, int root){
+    public void upAdjust(List<List<Integer>> L, int root, int[] nums1, int[] nums2){
         while (root >= 1){
-            int rootval = L.get(root).get(0) + L.get(root).get(1);
+            int rootval = nums1[L.get(root).get(0)] + nums2[L.get(root).get(1)];
             if (root / 2 < 1)   break;
-            int prerootval = L.get(root/2).get(0) + L.get(root/2).get(1);
+            int prerootval = nums1[L.get(root/2).get(0)] + nums2[L.get(root/2).get(1)];
             if (rootval < prerootval)   swap(L.get(root), L.get(root/2));
             else break;
             root /= 2;
         }
     }
 
-    public void createMinHeap(List<List<Integer>> L){
+
+    public void createMinHeap(List<List<Integer>> L, int[] nums1, int[] nums2){
         for (int i=L.size()/2;i>=1;i--){
-            downAdjust(L, i, L.size()-1);
+            downAdjust(L, i, L.size()-1, nums1, nums2);
         }
     }
 
-    public List<List<Integer>> MinHeapSort(List<List<Integer>> L, int k){
+    public List<List<Integer>> MinHeapSort(List<List<Integer>> L, int k, int[] nums1, int[] nums2){
         List<List<Integer>> r = new ArrayList<List<Integer>>();
         int end = L.size() - 1;
         while (k > 0 && end >= 1){
             r.add(new ArrayList<>(L.get(1)));
             swap(L.get(1), L.get(end));
-            downAdjust(L, 1, --end);
+            downAdjust(L, 1, --end, nums1, nums2);
             k--;
         }
         return r;
@@ -84,30 +85,40 @@ public class Solution373 {
                 L.add(new ArrayList<>(Arrays.asList(i, j)));
             }
         }
-        createMinHeap(L);
-        return MinHeapSort(L, k);
+        createMinHeap(L, nums1, nums2);
+        return MinHeapSort(L, k, nums1, nums2);
+    }
+
+    void print(List<List<Integer>> L){
+        for (List<Integer> x : L) {
+            System.out.print(x.get(0));
+            System.out.print(" ");
+            System.out.println(x.get(1));
+        }
+        System.out.println("====");
     }
 
     public List<List<Integer>> kSmallestPairs2(int[] nums1, int[] nums2, int k) {
-        HashMap<Integer, Integer> map = new HashMap<>();
-        for (int i=0;i<nums1.length;i++)    map.put(nums1[i],i);
         int[] p = new int[nums1.length];
         List<List<Integer>> L = new ArrayList<List<Integer>>();
         L.add(new ArrayList<>(Arrays.asList(Integer.MIN_VALUE, Integer.MIN_VALUE)));
         List<List<Integer>> r = new ArrayList<List<Integer>>();
         for (int i=0;i<p.length;i++){
-            L.add(new ArrayList<>(Arrays.asList(nums1[i], nums2[p[i]])));
+            L.add(new ArrayList<>(Arrays.asList(i, p[i])));
         }
-
+        createMinHeap(L, nums1, nums2);
         int m = 0;
         while (k > 0 && m < nums1.length){
-            r.add(new ArrayList<>(L.get(1)));
-            int x = ++p[map.get(L.get(1).get(0))];
+            List<Integer> t = new ArrayList<>();
+            t.add(nums1[L.get(1).get(0)]);
+            t.add(nums2[L.get(1).get(1)]);
+            r.add(t);
+            int x = ++p[L.get(1).get(0)];
             swap(L.get(1), L.get(L.size()-1-m));
-            downAdjust(L, 1, L.size()-2-m);
+            downAdjust(L, 1, L.size()-2-m, nums1, nums2);
             if (x<nums2.length){
-                L.get(L.size()-1-m).set(1, nums2[x]);
-                upAdjust(L, L.size()-1-m);
+                L.get(L.size()-1-m).set(1, x);
+                upAdjust(L, L.size()-1-m, nums1, nums2);
             }
             else m++;
             k--;
