@@ -9,6 +9,30 @@ package common;
 
 public class Solution334 {
     public boolean increasingTriplet(int[] nums) {
-
+        int i = 0, j = 0, k = 0;
+        int t = 0;
+        for (; k<nums.length; k++){
+            if (i==j){
+                if (nums[k] <= nums[i]){
+                    i = k;
+                    j = k;
+                }else {
+                    j = k;
+                }
+            }else {
+                if (nums[k] > nums[j])  return true;
+                else if (nums[k] <= nums[j] && nums[k] > nums[i]){
+                    j = k;
+                }
+                else {//当前遍历的元素小于当前生成的子序列全部元素时
+                    if (nums[k] <= nums[t]) t = k;
+                    else if (nums[k] > nums[t]){
+                        i = t;
+                        j = k;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
