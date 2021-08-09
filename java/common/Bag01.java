@@ -9,14 +9,19 @@ import java.util.List;
  */
 
 public class Bag01 {
+    /**
+     * dp[i][j]表示放第i件物品使得总重量小于j时的最大价值，如果说当前的物品的重量大于j，说明当前物品无论如何都放不下，因此此时的最大价值
+     * 就是放上一件物品时的最大价值，即dp[i-1][j]；但是如果当前物品的重量小于j,说明当前物品是放得下的，计算dp[i-1][j-w[i]] + c[i])，
+     * 其中j-w[i]表示当前容量刚好能放下当前物品
+    */
+    public int bag(int n, int[] w, int[] c, int V){
+        int[][] dp = new int[n][V+1];
 
-    public List<Integer> bag(int n, int[] w, int[] c, int V){
-        int[][] dp = new int[n+1][V+1];
-        for (int i=1;i<dp.length;i++){
+        for (int i=0;i<dp.length;i++){
             for (int j=1;j<dp[i].length;j++){
-                if ()
+                dp[i][j] = j >= w[i] ? Math.max(dp[i][j-1], dp[i-1][j-w[i]] + c[i]) : dp[i-1][j];
             }
         }
+        return dp[n-1][V];
     }
-
 }
