@@ -61,10 +61,7 @@ public class Solution386 {
                 x = x==9 ? 0 : x+1;
             }
         }
-
-
-
-
+        return null;
     }
 
 }
